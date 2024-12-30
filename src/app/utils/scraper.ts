@@ -90,7 +90,7 @@ export const scrapeUrl = async (url: string) => {
       listItems,
     ].join("");
 
-    combinedContent = cleanText(combinedContent).slice(0, 100000);
+    combinedContent = cleanText(combinedContent).slice(0, 10000);
 
     console.log(title, "url get scrapped response!");
 

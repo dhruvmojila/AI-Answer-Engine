@@ -22,18 +22,26 @@ export async function POST(req: Request) {
 
       const scrappedResponse = await scrapeUrl(url[0]);
       scrappedContent = scrappedResponse.content;
-      console.log("scrapped contetn", scrappedContent);
+      // console.log("scrapped contetn", scrappedContent);
     }
 
     const userQuery = message.replace(url ? url[0] : "", "").trim();
 
     const userPrompt = `
-    Answer my questions: "${userQuery}"
+      Respond to the user's query:
+      "${userQuery}"
 
-    Based on the following content: 
-    <content>
-    ${scrappedContent}
-    </content>
+      Use the provided content as the basis for your response:
+      <content>
+      ${scrappedContent}
+      </content>
+
+      If a URL is provided, ensure the content is accurately cited with proper attribution:
+      <url>
+      ${url}
+      </url>
+
+      If no sufficient content is provided, politely ask the user for more relevant information or useful links to help craft the most detailed and accurate response. Always base your answers strictly on the given content when available, and properly cite any external references or links provided.
     `;
 
     let llmMessages = [
@@ -48,6 +56,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: response });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({ message: "Error" });
   }
 }
